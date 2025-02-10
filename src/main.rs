@@ -6,7 +6,7 @@ use axum::{
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
 mod detectors;
-use detectors::handle_text_contents;
+use detectors::{handle_text_contents, handle_text_detection_content};
 
 #[tokio::main]
 async fn main() {
@@ -30,6 +30,7 @@ async fn main() {
     let app = Router::new()
         .route("/health", get(|| async { "Hello, World!" }))
         .route("/api/v1/text/contents", post(handle_text_contents))
+        .route("/api/v2/text/detection/content", post(handle_text_detection_content))
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
