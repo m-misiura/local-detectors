@@ -1,4 +1,4 @@
-use std::{env, net::SocketAddr};
+use std::{env, net::{SocketAddr, IpAddr}};
 use axum::{
     routing::{get, post},
     Router,
@@ -36,8 +36,7 @@ async fn main() {
                 .on_response(trace::DefaultOnResponse::new().level(Level::INFO)),
         );
 
-    // Parse the host string into IP address
-    let ip = host.parse().expect("Failed to parse host IP address");
+    let ip: IpAddr = host.parse().expect("Failed to parse host IP address");
     let addr = SocketAddr::from((ip, http_port));
     
     tracing::info!("listening on {}", addr);
